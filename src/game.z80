@@ -1387,33 +1387,32 @@ NORM_noVerticalScroll:
 	;ld de,beg_sprite+(320*9)+1 ; bottom left hand corner
 	;add hl,de
 	;ld a,(hl)
-	; add a blue color to the palette when I have the graphics
-	;cp blue color
+	;cp 003h ; blue color
 	;jr c,NORM_jmpTile_jumping
 	;ld de,10
 	;add hl,de
 	;ld a,(hl)
-	;cp blue color
+	;cp 003h
 	;jr c,NORM_jmpTile_jumping
 	;ld de,10
 	;add hl,de
 	;ld a,(hl)
-	;cp blue color 
+	;cp 003h 
 	;jr c,NORM_jmpTile_jumping
 	;ld de,(320*10)-20 ; bottom left hand corner
 	;add hl,de
 	;ld a,(hl)
-	;cp blue color
+	;cp 003h
 	;jr c,NORM_jmpTile_jumping
 	;ld de,10
 	;add hl,de
 	;ld a,(hl)
-	;cp blue color
+	;cp 003h
 	;jr c,NORM_jmpTile_jumping
 	;ld de,10
 	;add hl,de
 	;ld a,(hl)
-	;cp blue color
+	;cp 003h
 	jr nc,NORM_noJmpTile_jumping
 NORM_jmpTile_reverse_jumping:
 	cp 7Ah

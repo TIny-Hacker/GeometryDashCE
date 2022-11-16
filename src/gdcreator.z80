@@ -176,13 +176,19 @@ EDIT_arrowPressed:
 	jr nz, EDIT_insertMidRight
 	bit kbit9, a
 	jr nz, EDIT_insertUpRight
-	res FLG_toogleCtxt, (iy+asm_flag1)
-	bit kbitTan, a
-	jp nz, EDIT_toogleCtxt
-	set FLG_toogleCtxt, (iy+asm_flag1)
 	ld a,(kbdG2)
-	bit kbitLn, a
+	res FLG_toogleCtxt, (iy+asm_flag1)
+	bit kbitMath, a
+	jp nz, EDIT_toogleCtxt
+	bit kbitRecip, a
+	;jp nz, EDIT_toggleUFO
+	ld a,(kbdG3)
+	set FLG_toogleCtxt, (iy+asm_flag1)
+	bit kbitApps, a
 	jp nz,EDIT_toogleCtxt
+	ld a,(kbdG5)
+	bit kbitVars, a
+	; jp nz, EDIT_toggleBall
 
 	ld a,(kbdG6)
 	bit kbitAdd, a
