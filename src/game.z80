@@ -1354,22 +1354,22 @@ NORM_noVerticalScroll:
 	add hl,de
 	ld a,(hl)
 	cp 07Eh ; yellow
-	jr c,NORM_jmpTile_jumping
+	jp c,NORM_jmpTile_jumping
 	ld de,10
 	add hl,de
 	ld a,(hl)
 	cp 07Eh ; yellow
-	jr c,NORM_jmpTile_jumping
+	jp c,NORM_jmpTile_jumping
 	ld de,10
 	add hl,de
 	ld a,(hl)
 	cp 07Eh
-	jr c,NORM_jmpTile_jumping
+	jp c,NORM_jmpTile_jumping
 	ld de,(320*10)-20 ; bottom left hand corner
 	add hl,de
 	ld a,(hl)
 	cp 07Eh ; yellow
-	jr c,NORM_jmpTile_jumping
+	jp c,NORM_jmpTile_jumping
 	ld de,10
 	add hl,de
 	ld a,(hl)
@@ -1379,7 +1379,64 @@ NORM_noVerticalScroll:
 	add hl,de
 	ld a,(hl)
 	cp 07Eh
+	jr c, NORM_jmpTile_jumping
+
+	; reverse jump tile? (Needs an actual tile but here's the code)
+	;pop hl
+	;push hl
+	;ld de,beg_sprite+(320*9)+1 ; bottom left hand corner
+	;add hl,de
+	;ld a,(hl)
+	; add a blue color to the palette when I have the graphics
+	;cp blue color
+	;jr c,NORM_jmpTile_jumping
+	;ld de,10
+	;add hl,de
+	;ld a,(hl)
+	;cp blue color
+	;jr c,NORM_jmpTile_jumping
+	;ld de,10
+	;add hl,de
+	;ld a,(hl)
+	;cp blue color 
+	;jr c,NORM_jmpTile_jumping
+	;ld de,(320*10)-20 ; bottom left hand corner
+	;add hl,de
+	;ld a,(hl)
+	;cp blue color
+	;jr c,NORM_jmpTile_jumping
+	;ld de,10
+	;add hl,de
+	;ld a,(hl)
+	;cp blue color
+	;jr c,NORM_jmpTile_jumping
+	;ld de,10
+	;add hl,de
+	;ld a,(hl)
+	;cp blue color
 	jr nc,NORM_noJmpTile_jumping
+NORM_jmpTile_reverse_jumping:
+	cp 7Ah
+	jr c,NORM_noJmpTile_jumping
+	
+	ld a,($F50012)
+	bit 5, a
+	jr z,NORM_noJmpTile_jumping
+	bit FLG_jmpUsed, (iy+asm_flag2)
+	jr nz,NORM_noJmpTile_jumping
+
+	res FLG_jmpAgain, (iy+asm_flag1)
+	set FLG_jumping, (iy+asm_flag1)
+	set FLG_jmpUsed, (iy+asm_flag2)
+	set FLG_rvrsGravity, (iy+asm_flag1)
+	ld hl,jmpSpeedLUT
+	ld (jmp_speed),hl
+	ld hl,0
+	ld (mn),hl
+	set FLG_topReached, (iy+asm_flag1)
+	pop hl
+	jp dispCharacter
+
 NORM_jmpTile_jumping:
 	cp 7Ah
 	jr c,NORM_noJmpTile_jumping
@@ -1393,7 +1450,6 @@ NORM_jmpTile_jumping:
 	res FLG_jmpAgain, (iy+asm_flag1)
 	set FLG_jumping, (iy+asm_flag1)
 	set FLG_jmpUsed, (iy+asm_flag2)
-	ld hl,jmpSpeedLUT
 	ld (jmp_speed),hl
 	ld hl,0
 	ld (mn),hl

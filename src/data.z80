@@ -251,7 +251,7 @@ _tiles_pal:
  dw 0FFFFh
  dw 06A32h
  dw 07BE9h
- dw 0FFEDh
+ dw 0FFEDh ; yellow color for the jump tile
  dw 12288
  dw 0D002h
  dw 025C9h ; 00 :: rgba(71,112,76,255)
