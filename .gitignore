@@ -1,2 +1,5 @@
 *.zip
-
+# Only ignore the programs since you can't build the graphics appvars
+bin/*.8xp
+# (Probably not necessary)
+tools/

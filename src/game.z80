@@ -613,10 +613,10 @@ endNEW_dispTiles:
 	; ************************
 	; Square
 	;	makes the sprite jump
-	bit FLG_rvrsGravity, (iy+asm_flag1)
-	jp nz,RVRS_gravity
 	bit FLG_spaceshipOn, (iy+asm_flag1)
 	jp nz,SPCSHP_mode
+	bit FLG_rvrsGravity, (iy+asm_flag1)
+	jp nz,RVRS_gravity
 	jp NORM_gravity
 
 dispCharacter:
@@ -3001,8 +3001,16 @@ OFF_SPHP_eraseSpriteY:
 
 SPCSHP_mode:
 	ld de,(jmp_speed)
+	;push hl
+	;ld hl, -1
+	;ld (hl), 2
+	;pop hl
+	; ---------
 	bit FLG_jumping, (iy+asm_flag1)
 	jp nz,SPCSHP_jmping
+	bit FLG_rvrsGravity, (iy+asm_flag1)
+	jr nz, SPCSHP_mode_reverse
+SPCSHP_mode_normal:
 	ld hl,spcshpSpeedLUT_end
 	or a
 	sbc hl,de
@@ -3010,6 +3018,16 @@ SPCSHP_mode:
 	inc de
 	inc de
 	inc de
+	ld (jmp_speed),de
+	jr SPCSHP_suit
+SPCSHP_mode_reverse:
+	ld hl,spcshpSpeedLUT_beg
+	or a
+	sbc hl,de
+	jr nc,SPCSHP_suit
+	dec de
+	dec de
+	dec de
 	ld (jmp_speed),de
 SPCSHP_suit:
 
@@ -3130,6 +3148,8 @@ SPCSHP_touchedDown_adjustPosition_loop:
 	
 	
 SPCSHP_jmping:
+	bit FLG_rvrsGravity, (iy+asm_flag1)
+	jr nz, SPCSHP_jmping_reverse
 	ld hl,spcshpSpeedLUT_beg
 	or a
 	sbc hl,de
@@ -3147,10 +3167,31 @@ SPCSHP_jmping:
 	dec de
 	ld (jmp_speed),de
 	jp SPCSHP_suit
+SPCSHP_jmping_reverse:
+	ld hl,spcshpSpeedLUT_end
+	or a
+	sbc hl,de
+	jp z,SPCSHP_suit
+	inc de
+	inc de
+	inc de
+	ld (jmp_speed),de
+	ld hl,spcshpSpeedLUT_end
+	or a
+	sbc hl,de
+	jp z,SPCSHP_suit
+	inc de
+	inc de
+	inc de
+	ld (jmp_speed),de
+	jp SPCSHP_suit
 
 SPCSHP_up:
 	set FLG_jumping, (iy+asm_flag1)
-	ld de,(spr_state)
+	bit FLG_rvrsGravity, (iy+asm_flag1) ; tilt the other way in reverse gravity
+	jr nz, SPCSHP_down_after_check
+SPCSHP_up_after_check:
+	ld de,(spr_state) ; are we out of tiles for the spaceship?
 	ld hl,_spaceship_tiles_end-6
 	or a
 	sbc hl,de
@@ -3165,6 +3206,9 @@ SPCSHP_up_lastState:
 
 SPCSHP_down:
 	res FLG_jumping, (iy+asm_flag1)
+	bit FLG_rvrsGravity, (iy+asm_flag1)
+	jr nz, SPCSHP_up_after_check
+SPCSHP_down_after_check:
 	ld de,(spr_state)
 	ld hl,_spaceship_tiles_beg+6
 	or a

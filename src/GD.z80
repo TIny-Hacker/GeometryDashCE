@@ -402,6 +402,12 @@ drawBar:
 	ld bc,80*250
 	ldir
 
+	; Something useful in the future?
+	;push hl
+	;ld hl, -1
+	;ld (hl), 2
+	;pop hl
+	; ----------
 	ld ix,(current_level)
 	pea ix+3
 	ld ix,(ix)

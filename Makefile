@@ -1,22 +1,9 @@
-SPASM=spasm
-TILP=sudo tilp
+SPASM=tools/spasm64
 ZIP=zip
 BINARIES := $(wildcard bin/*.8x[pv])
 
-
 build:
 	$(SPASM) -E src/GD.z80 bin/AGD.8xp
-
-send:
-	$(TILP) -n -s AGD.8xp
-
-build_send:
-	$(SPASM) -E src/GD.z80 bin/AGD.8xp
-	$(TILP) -n -s bin/AGD.8xp
-
-sendall:
-	$(TILP) -n -s levels/*.8xv bin/*.8x{p,v}
-
 
 release: 
 	rm -f GeometryDash.zip
