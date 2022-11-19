@@ -3336,7 +3336,17 @@ dieHard:
 	pop hl
 	jr crashed
 die:
-	; If jumping tile
+	; chain/bounce collisions
+	cp 52
+	jp z, dispCharacter
+	cp 23
+	jp z, dispCharacter
+	cp 61
+	jp z, dispCharacter
+	cp 62
+	jp z, dispCharacter
+	cp 127
+	jp z, dispCharacter
 	cp $FA
 	jp nc,dispCharacter
 	cp $7A

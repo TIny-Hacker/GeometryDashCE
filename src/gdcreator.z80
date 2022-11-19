@@ -155,11 +155,11 @@ EDIT_arrowPressed:
 
 	ld a,(kbdG3)
 	bit kbit1, a
-	jr nz, EDIT_insertBotLeft
+	jp nz, EDIT_insertBotLeft
 	bit kbit4, a
-	jr nz, EDIT_insertMidLeft
+	jp nz, EDIT_insertMidLeft
 	bit kbit7, a
-	jr nz, EDIT_insertUpLeft
+	jp nz, EDIT_insertUpLeft
 	ld a,(kbdG4)
 	bit kbit2, a
 	jr nz, EDIT_insertBotMid
